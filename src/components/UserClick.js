@@ -1,7 +1,6 @@
 const UserClick = ({ userX, userY }) => {
   return (
     <div
-      id="dropdown"
       style={{
         position: "absolute",
         top: userY,
