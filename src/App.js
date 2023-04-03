@@ -5,6 +5,7 @@ import penguin from "./imgs/penguin.png";
 import RenderImage from "./components/RenderImage";
 import UserClick from "./components/UserClick";
 import TimeTracker from "./components/TimeTracker";
+import CongratsMessage from "./components/CongratsMessage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlPkxaHlHQcU7YZONNQAk3sGexKpH3XFQ",
@@ -24,7 +25,7 @@ const App = () => {
     y: 0,
   });
   const [userClock, setUserClock] = useState({
-    clock: 0,
+    clock: 357,
   });
 
   const onClick = (e) => {
@@ -49,6 +50,20 @@ const App = () => {
         clock: (userClock.clock += 1),
       });
     }, 1000);
+  };
+
+  const FinalTimeMessage = () => {
+    let timeInSeconds = userClock.clock;
+    let regEx = /(\w+)/g;
+    let minutes = (timeInSeconds / 60).toString().match(regEx)[0];
+    /* divide the seconds into a decimal value for time and take the
+    minute value which is already in correct format */
+    let seconds = (timeInSeconds / 60 - minutes) * 60;
+    /* transofrm the decimal value for seconds into its proper time format */
+    let time = `Your time is ${minutes} minutes and ${seconds.toFixed(
+      0
+    )} seconds.`;
+    console.log(time);
   };
 
   const UserClickCheck = () => {
