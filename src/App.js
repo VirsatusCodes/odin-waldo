@@ -97,8 +97,8 @@ const App = () => {
   return (
     <div>
       <RenderImage img={penguin} onClick={onClick} />
-      <UserClickCheck />
       <TimeTracker onClick={timer} userTime={userClock.clock} />
+      <UserClickCheck />
       <ScoreMonitor />
     </div>
   );

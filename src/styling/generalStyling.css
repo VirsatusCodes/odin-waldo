@@ -11,6 +11,21 @@ body {
   justify-content: center;
   padding-top: 20vh;
 }
+.game-info {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.game-info > button {
+  height: 30px;
+}
+
+.game-info > div {
+  padding-top: 20px;
+}
 
 .end-game-message {
   display: flex;
