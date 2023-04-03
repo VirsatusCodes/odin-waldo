@@ -25,7 +25,12 @@ const App = () => {
     y: 0,
   });
   const [userClock, setUserClock] = useState({
-    clock: 357,
+    clock: 157,
+  });
+  const [targetsTracker, setTargetsTracker] = useState({
+    target1: true,
+    target2: true,
+    target3: true,
   });
 
   const onClick = (e) => {
@@ -44,6 +49,16 @@ const App = () => {
     }
   };
 
+  const ScoreMonitor = () => {
+    for (const target in targetsTracker) {
+      if (targetsTracker[target] === false) {
+        return console.log("do nothing");
+      }
+    }
+    return (
+      <CongratsMessage endGameMessage={endGameMessage} resetGame={resetGame} />
+    );
+  };
   const timer = () => {
     setInterval(() => {
       setUserClock({
@@ -52,7 +67,15 @@ const App = () => {
     }, 1000);
   };
 
-  const FinalTimeMessage = () => {
+  const resetGame = () => {
+    setTargetsTracker({
+      target1: false,
+      target2: false,
+      target3: false,
+    });
+  };
+
+  const endGameMessage = () => {
     let timeInSeconds = userClock.clock;
     let regEx = /(\w+)/g;
     let minutes = (timeInSeconds / 60).toString().match(regEx)[0];
@@ -60,10 +83,10 @@ const App = () => {
     minute value which is already in correct format */
     let seconds = (timeInSeconds / 60 - minutes) * 60;
     /* transofrm the decimal value for seconds into its proper time format */
-    let time = `Your time is ${minutes} minutes and ${seconds.toFixed(
+    let time = `Congrats you won! your time was ${minutes} minutes and ${seconds.toFixed(
       0
     )} seconds.`;
-    console.log(time);
+    return time;
   };
 
   const UserClickCheck = () => {
@@ -76,6 +99,7 @@ const App = () => {
       <RenderImage img={penguin} onClick={onClick} />
       <UserClickCheck />
       <TimeTracker onClick={timer} userTime={userClock.clock} />
+      <ScoreMonitor />
     </div>
   );
 };
