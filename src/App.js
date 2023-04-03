@@ -25,12 +25,13 @@ const App = () => {
     y: 0,
   });
   const [userClock, setUserClock] = useState({
+    started: false,
     clock: 157,
   });
   const [targetsTracker, setTargetsTracker] = useState({
     target1: true,
     target2: true,
-    target3: true,
+    target3: false,
   });
 
   const onClick = (e) => {
@@ -60,11 +61,14 @@ const App = () => {
     );
   };
   const timer = () => {
-    setInterval(() => {
-      setUserClock({
-        clock: (userClock.clock += 1),
-      });
-    }, 1000);
+    if (userClock.started === false) {
+      setInterval(() => {
+        setUserClock({
+          started: true,
+          clock: (userClock.clock += 1),
+        });
+      }, 1000);
+    }
   };
 
   const resetGame = () => {
@@ -72,6 +76,17 @@ const App = () => {
       target1: false,
       target2: false,
       target3: false,
+    });
+
+    setUserClick({
+      clicked: false,
+      x: 0,
+      y: 0,
+    });
+
+    setUserClock({
+      started: false,
+      clock: 0,
     });
   };
 
