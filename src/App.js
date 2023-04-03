@@ -4,6 +4,7 @@ import "./styling/generalStyling.css";
 import penguin from "./imgs/penguin.png";
 import RenderImage from "./components/RenderImage";
 import UserClick from "./components/UserClick";
+import TimeTracker from "./components/TimeTracker";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlPkxaHlHQcU7YZONNQAk3sGexKpH3XFQ",
@@ -22,6 +23,9 @@ const App = () => {
     x: 0,
     y: 0,
   });
+  const [userClock, setUserClock] = useState({
+    clock: 0,
+  });
 
   const onClick = (e) => {
     if (userClick.clicked === false) {
@@ -37,11 +41,14 @@ const App = () => {
         y: e.clientY,
       });
     }
+  };
 
-    console.log(userClick.clicked);
-    console.log(userClick.x);
-    console.log(e.clientX);
-    console.log(typeof userClick.x);
+  const timer = () => {
+    setInterval(() => {
+      setUserClock({
+        clock: (userClock.clock += 1),
+      });
+    }, 1000);
   };
 
   const UserClickCheck = () => {
@@ -53,6 +60,7 @@ const App = () => {
     <div>
       <RenderImage img={penguin} onClick={onClick} />
       <UserClickCheck />
+      <TimeTracker onClick={timer} userTime={userClock.clock} />
     </div>
   );
 };
