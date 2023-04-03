@@ -4,13 +4,47 @@ body {
   font-family: sans-serif;
   min-height: 100vh;
   background-color: olivedrab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .imgContainer {
-  display: flex;
-  justify-content: center;
-  padding-top: 20vh;
+  position: relative;
+  width: 441px;
+  height: 444px;
 }
+
+.hat {
+  position: absolute;
+  left: 115px;
+  top: 28px;
+  background-color: pink;
+  width: 100px;
+  height: 80px;
+  opacity: 0.3;
+}
+
+.nose {
+  position: absolute;
+  left: 206px;
+  top: 115px;
+  background-color: pink;
+  width: 46px;
+  height: 45px;
+  opacity: 0.2;
+}
+
+.left-foot {
+  position: absolute;
+  right: 108px;
+  bottom: 4px;
+  background-color: pink;
+  width: 57px;
+  height: 52px;
+  opacity: 0.2;
+}
+
 .game-info {
   display: flex;
   flex-flow: column;
