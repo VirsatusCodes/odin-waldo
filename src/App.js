@@ -57,23 +57,24 @@ const App = () => {
   };
 
   const onSelect = (e) => {
-    const userSelection = e.target.value;
-    const transformedUserSelection = wordCollapser(userSelection);
-    console.log(e.target.value);
-    /* console.log(
+    if (userClock.started !== false) {
+      const userSelection = e.target.value;
+      const transformedUserSelection = wordCollapser(userSelection);
+      console.log(e.target.value);
+      /* console.log(
       document.querySelector(`[data-value="${userSelection.selection}"]`)
         .dataset.value,
       "dataset"
     ); */
-    console.log(transformedUserSelection);
-    console.log(userClickLocationClass.selection);
-    if (transformedUserSelection === userClickLocationClass.selection) {
-      setTargetsTracker({
-        ...targetsTracker,
-        [transformedUserSelection]: true,
-      });
+      console.log(transformedUserSelection);
+      console.log(userClickLocationClass.selection);
+      if (transformedUserSelection === userClickLocationClass.selection) {
+        setTargetsTracker({
+          ...targetsTracker,
+          [transformedUserSelection]: true,
+        });
+      }
     }
-    console.log(targetsTracker);
   };
   const wordCollapser = (words) => {
     let regEx = /\s/g;
