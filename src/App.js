@@ -68,8 +68,12 @@ const App = () => {
     console.log(transformedUserSelection);
     console.log(userClickLocationClass.selection);
     if (transformedUserSelection === userClickLocationClass.selection) {
-      console.log("works");
+      setTargetsTracker({
+        ...targetsTracker,
+        [transformedUserSelection]: true,
+      });
     }
+    console.log(targetsTracker);
   };
   const wordCollapser = (words) => {
     let regEx = /\s/g;
@@ -100,7 +104,7 @@ const App = () => {
 
   const resetGame = () => {
     setTargetsTracker({
-      target1: false,
+      hat: false,
       nose: false,
       leftfoot: false,
     });
