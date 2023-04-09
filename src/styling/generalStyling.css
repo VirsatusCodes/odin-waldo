@@ -35,9 +35,9 @@ body {
   opacity: 0.2;
 }
 
-.left-foot {
+.leftfoot {
   position: absolute;
-  right: 108px;
+  right: 104px;
   bottom: 4px;
   background-color: pink;
   width: 57px;

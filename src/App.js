@@ -29,9 +29,12 @@ const App = () => {
     clock: 157,
   });
   const [targetsTracker, setTargetsTracker] = useState({
-    target1: true,
-    target2: true,
-    target3: false,
+    hat: true,
+    nose: true,
+    leftfoot: false,
+  });
+  const [userClickLocationClass, setUserClickLocationClass] = useState({
+    selection: "",
   });
 
   const onClick = (e) => {
@@ -48,12 +51,36 @@ const App = () => {
         y: e.clientY,
       });
     }
+    setUserClickLocationClass({
+      selection: e.target.className,
+    });
+  };
+
+  const onSelect = (e) => {
+    const userSelection = e.target.value;
+    const transformedUserSelection = wordCollapser(userSelection);
+    console.log(e.target.value);
+    /* console.log(
+      document.querySelector(`[data-value="${userSelection.selection}"]`)
+        .dataset.value,
+      "dataset"
+    ); */
+    console.log(transformedUserSelection);
+    console.log(userClickLocationClass.selection);
+    if (transformedUserSelection === userClickLocationClass.selection) {
+      console.log("works");
+    }
+  };
+  const wordCollapser = (words) => {
+    let regEx = /\s/g;
+    /* this regEx selects whitespace */
+    return words.replace(regEx, "");
   };
 
   const ScoreMonitor = () => {
     for (const target in targetsTracker) {
       if (targetsTracker[target] === false) {
-        return console.log("do nothing");
+        return;
       }
     }
     return (
@@ -74,8 +101,8 @@ const App = () => {
   const resetGame = () => {
     setTargetsTracker({
       target1: false,
-      target2: false,
-      target3: false,
+      nose: false,
+      leftfoot: false,
     });
 
     setUserClick({
@@ -106,7 +133,9 @@ const App = () => {
 
   const UserClickCheck = () => {
     if (userClick.clicked === true) {
-      return <UserClick userX={userClick.x} userY={userClick.y} />;
+      return (
+        <UserClick userX={userClick.x} userY={userClick.y} onClick={onSelect} />
+      );
     }
   };
   return (
