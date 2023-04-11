@@ -45,7 +45,8 @@ body {
   opacity: 0.2;
 }
 
-.game-info {
+.game-info,
+.game-start {
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -53,7 +54,7 @@ body {
   padding-top: 20px;
 }
 
-.game-info > button {
+.game-start > button {
   height: 30px;
 }
 

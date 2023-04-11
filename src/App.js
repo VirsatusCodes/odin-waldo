@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import "./styling/generalStyling.css";
 import penguin from "./imgs/penguin.png";
@@ -6,6 +6,7 @@ import RenderImage from "./components/RenderImage";
 import UserClick from "./components/UserClick";
 import TimeTracker from "./components/TimeTracker";
 import CongratsMessage from "./components/CongratsMessage";
+import GameStart from "./components/GameStart";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlPkxaHlHQcU7YZONNQAk3sGexKpH3XFQ",
@@ -24,9 +25,8 @@ const App = () => {
     x: 0,
     y: 0,
   });
-  const [userClock, setUserClock] = useState({
+  const [gameStatus, setGameStatus] = useState({
     started: false,
-    clock: 157,
   });
   const [targetsTracker, setTargetsTracker] = useState({
     hat: true,
@@ -57,7 +57,7 @@ const App = () => {
   };
 
   const onSelect = (e) => {
-    if (userClock.started !== false) {
+    if (gameStatus.started !== false) {
       const userSelection = e.target.value;
       const transformedUserSelection = wordCollapser(userSelection);
       console.log(e.target.value);
@@ -88,19 +88,18 @@ const App = () => {
         return;
       }
     }
+
     return (
       <CongratsMessage endGameMessage={endGameMessage} resetGame={resetGame} />
     );
   };
-  const timer = () => {
-    if (userClock.started === false) {
-      setInterval(() => {
-        setUserClock({
-          started: true,
-          clock: (userClock.clock += 1),
-        });
-      }, 1000);
+  const gameState = () => {
+    if (gameStatus.started === false) {
+      setGameStatus({
+        started: true,
+      });
     }
+    console.log(gameStatus.started);
   };
 
   const resetGame = () => {
@@ -116,14 +115,13 @@ const App = () => {
       y: 0,
     });
 
-    setUserClock({
+    setGameStatus({
       started: false,
-      clock: 0,
     });
   };
 
   const endGameMessage = () => {
-    let timeInSeconds = userClock.clock;
+    let timeInSeconds = gameStatus.clock;
     let regEx = /(\w+)/g;
     let minutes = (timeInSeconds / 60).toString().match(regEx)[0];
     /* divide the seconds into a decimal value for time and take the
@@ -146,8 +144,9 @@ const App = () => {
   return (
     <div>
       <RenderImage img={penguin} onClick={onClick} />
-      <TimeTracker onClick={timer} userTime={userClock.clock} />
+      <TimeTracker gameState={gameStatus} />
       <UserClickCheck />
+      <GameStart gameStateSetter={gameState} />
       <ScoreMonitor />
     </div>
   );
