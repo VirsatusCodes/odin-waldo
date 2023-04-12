@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import "./styling/generalStyling.css";
-import penguin from "./imgs/penguin.png";
+import backEndInfoMock from "./backEndInfoMock";
 import RenderImage from "./components/RenderImage";
 import UserClick from "./components/UserClick";
 import TimeTracker from "./components/TimeTracker";
@@ -20,11 +20,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const App = () => {
-  const [userClick, setUserClick] = useState({
-    clicked: false,
+  const [backEndInfo, setBackendInfo] = useState(backEndInfoMock);
+
+  const [gameInfo, setGameInfo] = useState({
+    gameStarted: false,
+    clock: 0,
+  });
+
+  const [userClick, setUserClock] = useState({
+    hasClickedImage: false,
     x: 0,
     y: 0,
+    selectedDivClass: "",
   });
+
   const [gameStatus, setGameStatus] = useState({
     started: false,
   });
@@ -32,9 +41,6 @@ const App = () => {
     hat: true,
     nose: true,
     leftfoot: false,
-  });
-  const [userClickLocationClass, setUserClickLocationClass] = useState({
-    selection: "",
   });
 
   const onClick = (e) => {
@@ -55,6 +61,8 @@ const App = () => {
       selection: e.target.className,
     });
   };
+
+  useEffect(() => {}, [targetsTracker]);
 
   const onSelect = (e) => {
     if (gameStatus.started !== false) {
@@ -88,6 +96,10 @@ const App = () => {
         return;
       }
     }
+
+    setGameStatus({
+      started: false,
+    });
 
     return (
       <CongratsMessage endGameMessage={endGameMessage} resetGame={resetGame} />
