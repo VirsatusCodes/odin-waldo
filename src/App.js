@@ -20,52 +20,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const App = () => {
-  const [backEndInfo, setBackendInfo] = useState(backEndInfoMock);
+  const [backEndInfo, setBackEndInfo] = useState(backEndInfoMock);
 
   const [gameInfo, setGameInfo] = useState({
     gameStarted: false,
     clock: 0,
   });
 
-  const [userClick, setUserClock] = useState({
+  const [userClick, setUserClick] = useState({
+    selectedDivClass: "",
     hasClickedImage: false,
     x: 0,
     y: 0,
-    selectedDivClass: "",
-  });
-
-  const [gameStatus, setGameStatus] = useState({
-    started: false,
-  });
-  const [targetsTracker, setTargetsTracker] = useState({
-    hat: true,
-    nose: true,
-    leftfoot: false,
   });
 
   const onClick = (e) => {
-    if (userClick.clicked === false) {
+    if (userClick.hasClickedImage === false) {
+      console.log("a");
       setUserClick({
-        clicked: true,
+        selectedDivClass: e.target.className,
+        hasClickedImage: true,
         x: e.clientX,
         y: e.clientY,
       });
-    } else if (userClick.clicked === true) {
+    } else if (userClick.hasClickedImage === true) {
+      console.log("b");
       setUserClick({
-        clicked: false,
+        selectedDivClass: e.target.className,
+        hasClickedImage: false,
         x: e.clientX,
         y: e.clientY,
       });
     }
-    setUserClickLocationClass({
-      selection: e.target.className,
-    });
+    console.log(userClick);
+    console.log(backEndInfo.targets);
   };
 
-  useEffect(() => {}, [targetsTracker]);
+  useEffect(() => {}, []);
 
   const onSelect = (e) => {
-    if (gameStatus.started !== false) {
+    if (gameInfo.gameStarted !== false) {
       const userSelection = e.target.value;
       const transformedUserSelection = wordCollapser(userSelection);
       console.log(e.target.value);
@@ -75,11 +69,14 @@ const App = () => {
       "dataset"
     ); */
       console.log(transformedUserSelection);
-      console.log(userClickLocationClass.selection);
-      if (transformedUserSelection === userClickLocationClass.selection) {
-        setTargetsTracker({
-          ...targetsTracker,
-          [transformedUserSelection]: true,
+      console.log(userClick.selectedDivClass);
+      if (transformedUserSelection === userClick.selectedDivClass) {
+        setBackEndInfo({
+          ...backEndInfo,
+          targets: {
+            ...backEndInfo.targets,
+            [transformedUserSelection]: true,
+          },
         });
       }
     }
@@ -90,50 +87,41 @@ const App = () => {
     return words.replace(regEx, "");
   };
 
-  const ScoreMonitor = () => {
-    for (const target in targetsTracker) {
-      if (targetsTracker[target] === false) {
-        return;
-      }
-    }
-
-    setGameStatus({
-      started: false,
-    });
-
-    return (
-      <CongratsMessage endGameMessage={endGameMessage} resetGame={resetGame} />
-    );
-  };
   const gameState = () => {
-    if (gameStatus.started === false) {
-      setGameStatus({
-        started: true,
+    if (gameInfo.gameStarted === false) {
+      setGameInfo({
+        gameStarted: true,
+        clock: 0,
       });
     }
-    console.log(gameStatus.started);
+    console.log(gameInfo.gameStarted);
   };
 
   const resetGame = () => {
-    setTargetsTracker({
-      hat: false,
-      nose: false,
-      leftfoot: false,
+    setBackEndInfo({
+      ...backEndInfo,
+      targets: {
+        hat: false,
+        nose: false,
+        leftfoot: false,
+      },
     });
 
     setUserClick({
-      clicked: false,
+      selectedDivClass: "",
+      hasClickedImage: false,
       x: 0,
       y: 0,
     });
 
-    setGameStatus({
-      started: false,
+    setGameInfo({
+      gameStarted: false,
+      clock: 0,
     });
   };
 
   const endGameMessage = () => {
-    let timeInSeconds = gameStatus.clock;
+    let timeInSeconds = gameInfo.clock;
     let regEx = /(\w+)/g;
     let minutes = (timeInSeconds / 60).toString().match(regEx)[0];
     /* divide the seconds into a decimal value for time and take the
@@ -146,20 +134,17 @@ const App = () => {
     return time;
   };
 
-  const UserClickCheck = () => {
-    if (userClick.clicked === true) {
-      return (
-        <UserClick userX={userClick.x} userY={userClick.y} onClick={onSelect} />
-      );
-    }
-  };
   return (
     <div>
-      <RenderImage img={penguin} onClick={onClick} />
-      <TimeTracker gameState={gameStatus} />
-      <UserClickCheck />
+      <RenderImage backEndInfo={backEndInfo} onClick={onClick} />
+      <TimeTracker gameState={"test"} />
+      <UserClick userClick={userClick} onSelect={onSelect} />
       <GameStart gameStateSetter={gameState} />
-      <ScoreMonitor />
+      <CongratsMessage
+        targets={backEndInfo.targets}
+        endGameMessage={endGameMessage}
+        resetGame={resetGame}
+      />
     </div>
   );
 };

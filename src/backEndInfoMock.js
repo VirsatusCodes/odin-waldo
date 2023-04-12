@@ -1,9 +1,11 @@
 import penguin from "./imgs/penguin.png";
 
 const backEndInfoMock = {
-  imageLink: penguin,
-  imageHeight: 0,
-  imageWidth: 0,
+  imageInfo: {
+    reference: penguin,
+    imageContainerHeight: 444,
+    imageContainerWidth: 441,
+  },
   targets: {
     hat: true,
     nose: true,

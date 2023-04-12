@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 const GameStart = ({ gameStateSetter }) => {
   return (
     <div className="game-start">
