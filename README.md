@@ -4,5 +4,3 @@ Project: Where's Waldo (A Photo Tagging App) https://www.theodinproject.com/less
 
 Todo:
 dynamically render div placements and class's and select names etc based on provided info instead of hardcoding it.
-
-individual divs position and size gotten from backend info.

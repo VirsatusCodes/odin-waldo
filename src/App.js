@@ -134,6 +134,28 @@ const App = () => {
     return time;
   };
 
+  /* const timer = () => {
+    if (gameInfo.gameStarted === true) {
+      setGameInfo(
+        {
+          gameStarted: true,
+          clock: (gameInfo.clock += 1),
+        },
+        1000
+      );
+    }
+  }; */
+  const timer = () => {
+    if (gameInfo.gameStarted === true) {
+      setInterval(() => {
+        setGameInfo({
+          gameStarted: true,
+          clock: (gameInfo.clock += 1),
+        });
+      }, 1000);
+    }
+  };
+
   return (
     <div>
       <RenderImage
@@ -141,7 +163,7 @@ const App = () => {
         divInfo={backEndInfo.divInfo}
         onClick={onClick}
       />
-      <TimeTracker gameState={"test"} />
+      <TimeTracker gameInfo={gameInfo} timer={timer} />
       <UserClick userClick={userClick} onSelect={onSelect} />
       <GameStart gameStateSetter={gameState} />
       <CongratsMessage
