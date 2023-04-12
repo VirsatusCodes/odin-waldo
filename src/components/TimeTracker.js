@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
-const TimeTracker = ({ gameInfo, timer }) => {
+const TimeTracker = ({ gameInfo }) => {
+  const [timer, setTimer] = useState(0);
+
   useEffect(() => {
-    const interval = timer;
+    let interval;
     if (gameInfo.gameStarted) {
-      interval();
+      interval = setInterval(() => {
+        setTimer((timer) => timer + 1);
+      }, 1000);
     }
-    console.log(gameInfo.gameStarted, "test");
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [gameInfo.gameStarted]);
 
   return (
     <div className="game-info">
-      <div>You have searched for: {gameInfo.clock} seconds</div>
+      <div>You have searched for: {timer} seconds</div>
     </div>
   );
 };

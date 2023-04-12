@@ -155,7 +155,7 @@ const App = () => {
       }, 1000);
     }
   };
-
+  console.log(gameInfo.gameStarted);
   return (
     <div>
       <RenderImage
@@ -163,7 +163,7 @@ const App = () => {
         divInfo={backEndInfo.divInfo}
         onClick={onClick}
       />
-      <TimeTracker gameInfo={gameInfo} timer={timer} />
+      <TimeTracker gameInfo={gameInfo} />
       <UserClick userClick={userClick} onSelect={onSelect} />
       <GameStart gameStateSetter={gameState} />
       <CongratsMessage
