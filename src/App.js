@@ -136,7 +136,11 @@ const App = () => {
 
   return (
     <div>
-      <RenderImage backEndInfo={backEndInfo} onClick={onClick} />
+      <RenderImage
+        imgInfo={backEndInfo.imageInfo}
+        divInfo={backEndInfo.divInfo}
+        onClick={onClick}
+      />
       <TimeTracker gameState={"test"} />
       <UserClick userClick={userClick} onSelect={onSelect} />
       <GameStart gameStateSetter={gameState} />
