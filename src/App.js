@@ -22,9 +22,13 @@ const app = initializeApp(firebaseConfig);
 const App = () => {
   const [backEndInfo, setBackEndInfo] = useState(backEndInfoMock);
 
-  const [gameInfo, setGameInfo] = useState({
-    gameStarted: false,
-    clock: 0,
+  const [gameState, setGameState] = useState(false);
+
+  const [gameOver, setGameOver] = useState(false);
+
+  const [gameTime, setGameTime] = useState({
+    start: 0,
+    end: 0,
   });
 
   const [userClick, setUserClick] = useState({
@@ -34,9 +38,19 @@ const App = () => {
     y: 0,
   });
 
+  const [score, setScore] = useState({
+    currentScore: {
+      min: 0,
+      sec: 0,
+    },
+    highScore: {
+      min: 0,
+      sec: 0,
+    },
+  });
+
   const onClick = (e) => {
     if (userClick.hasClickedImage === false) {
-      console.log("a");
       setUserClick({
         selectedDivClass: e.target.className,
         hasClickedImage: true,
@@ -44,7 +58,6 @@ const App = () => {
         y: e.clientY,
       });
     } else if (userClick.hasClickedImage === true) {
-      console.log("b");
       setUserClick({
         selectedDivClass: e.target.className,
         hasClickedImage: false,
@@ -52,24 +65,18 @@ const App = () => {
         y: e.clientY,
       });
     }
-    console.log(userClick);
-    console.log(backEndInfo.targets);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    gameEnd();
+    scoreSetter();
+  }, [backEndInfo.targets, gameOver]);
 
   const onSelect = (e) => {
-    if (gameInfo.gameStarted !== false) {
+    if (gameState) {
       const userSelection = e.target.value;
       const transformedUserSelection = wordCollapser(userSelection);
-      console.log(e.target.value);
-      /* console.log(
-      document.querySelector(`[data-value="${userSelection.selection}"]`)
-        .dataset.value,
-      "dataset"
-    ); */
-      console.log(transformedUserSelection);
-      console.log(userClick.selectedDivClass);
+
       if (transformedUserSelection === userClick.selectedDivClass) {
         setBackEndInfo({
           ...backEndInfo,
@@ -87,22 +94,42 @@ const App = () => {
     return words.replace(regEx, "");
   };
 
-  const gameState = () => {
-    if (gameInfo.gameStarted === false) {
-      setGameInfo({
-        gameStarted: true,
-        clock: 0,
+  const targetChecker = (object) => {
+    for (const key in object) {
+      if (object[key] === false) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const gameStart = () => {
+    if (!gameState) {
+      setGameState(true);
+      setGameTime({
+        start: Date.now(),
+        end: 0,
       });
     }
-    console.log(gameInfo.gameStarted);
+  };
+
+  const gameEnd = () => {
+    if (gameState && targetChecker(backEndInfo.targets)) {
+      setGameTime({
+        ...gameTime,
+        end: Date.now(),
+      });
+
+      setGameOver(true);
+    }
   };
 
   const resetGame = () => {
     setBackEndInfo({
       ...backEndInfo,
       targets: {
-        hat: false,
-        nose: false,
+        hat: true,
+        nose: true,
         leftfoot: false,
       },
     });
@@ -114,48 +141,45 @@ const App = () => {
       y: 0,
     });
 
-    setGameInfo({
-      gameStarted: false,
-      clock: 0,
+    setGameState(false);
+
+    setGameTime({
+      start: 0,
+      end: 0,
+    });
+
+    setGameOver(false);
+
+    setScore({
+      ...setScore,
+      currentScore: {
+        min: 0,
+        sec: 0,
+      },
     });
   };
 
-  const endGameMessage = () => {
-    let timeInSeconds = gameInfo.clock;
-    let regEx = /(\w+)/g;
-    let minutes = (timeInSeconds / 60).toString().match(regEx)[0];
-    /* divide the seconds into a decimal value for time and take the
-    minute value which is already in correct format */
-    let seconds = (timeInSeconds / 60 - minutes) * 60;
-    /* transofrm the decimal value for seconds into its proper time format */
-    let time = `Congrats you won! your time was ${minutes} minutes and ${seconds.toFixed(
-      0
-    )} seconds.`;
-    return time;
+  const scoreSetter = () => {
+    let timeInSeconds = Math.floor((gameTime.end - gameTime.start) / 1000);
+    let newMin = Math.floor(timeInSeconds / 60);
+    let newSec = timeInSeconds % 60;
+    console.log(newMin, newSec, "asde");
+    setScore({
+      ...score,
+      currentScore: {
+        min: newMin,
+        sec: newSec,
+      },
+    });
   };
 
-  /* const timer = () => {
-    if (gameInfo.gameStarted === true) {
-      setGameInfo(
-        {
-          gameStarted: true,
-          clock: (gameInfo.clock += 1),
-        },
-        1000
-      );
-    }
-  }; */
-  const timer = () => {
-    if (gameInfo.gameStarted === true) {
-      setInterval(() => {
-        setGameInfo({
-          gameStarted: true,
-          clock: (gameInfo.clock += 1),
-        });
-      }, 1000);
-    }
+  const endTime = () => {
+    setGameTime({
+      ...gameTime,
+      end: Date.now(),
+    });
   };
-  console.log(gameInfo.gameStarted);
+
   return (
     <div>
       <RenderImage
@@ -163,13 +187,14 @@ const App = () => {
         divInfo={backEndInfo.divInfo}
         onClick={onClick}
       />
-      <TimeTracker gameInfo={gameInfo} />
+      <TimeTracker gameState={gameState} />
       <UserClick userClick={userClick} onSelect={onSelect} />
-      <GameStart gameStateSetter={gameState} />
+      <GameStart gameStateSetter={gameStart} />
+
       <CongratsMessage
-        targets={backEndInfo.targets}
-        endGameMessage={endGameMessage}
         resetGame={resetGame}
+        gameOver={gameOver}
+        score={score.currentScore}
       />
     </div>
   );

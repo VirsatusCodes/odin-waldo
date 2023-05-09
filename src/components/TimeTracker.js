@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
-const TimeTracker = ({ gameInfo }) => {
+const TimeTracker = ({ gameState }) => {
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
     let interval;
-    if (gameInfo.gameStarted) {
+    if (gameState) {
       interval = setInterval(() => {
         setTimer((timer) => timer + 1);
       }, 1000);
+    } else if (!gameState) {
+      clearInterval(interval);
+      setTimer(0);
     }
 
     return () => {
       clearInterval(interval);
     };
-  }, [gameInfo.gameStarted]);
+  }, [gameState]);
 
   return (
     <div className="game-info">

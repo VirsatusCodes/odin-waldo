@@ -1,16 +1,20 @@
-const CongratsMessage = ({ targets, endGameMessage, resetGame }) => {
-  for (const target in targets) {
-    if (targets[target] === false) {
-      console.log("should NOT render endgame screen");
-      return;
-    }
-  }
+import React, { useState, useEffect } from "react";
+const CongratsMessage = ({ resetGame, gameOver, score }) => {
+  const EndChecker = () => {
+    console.log(score);
+    if (gameOver) {
+      return (
+        <div className="end-game-message">
+          <div>
+            congrats! your score was {score.min} minutes and {score.sec}{" "}
+            seconds!
+          </div>
+          <button onClick={resetGame}>New Game?</button>
+        </div>
+      );
+    } else return;
+  };
 
-  return (
-    <div className="end-game-message">
-      <div>{endGameMessage()}</div>
-      <button onClick={resetGame}>New Game?</button>
-    </div>
-  );
+  return <EndChecker />;
 };
 export default CongratsMessage;
